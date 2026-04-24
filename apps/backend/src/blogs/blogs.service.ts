@@ -69,10 +69,17 @@ export class BlogsService {
     return this.mapToResponse(savedBlog);
   }
 
-  async findAll(page: number, limit: number): Promise<IBlogPaginatedResponse> {
+  async findAll(
+    page: number,
+    limit: number,
+    isAdmin = false,
+  ): Promise<IBlogPaginatedResponse> {
     const skip = (page - 1) * limit;
 
+    const whereCondition = isAdmin ? {} : { isPublished: true };
+
     const [data, total] = await this.blogRepository.findAndCount({
+      where: whereCondition,
       skip: skip,
       take: limit,
       order: {
@@ -96,8 +103,8 @@ export class BlogsService {
     return {
       data: data.map((blog) => {
         const fullResponse = this.mapToResponse(blog);
-        const { content, ...rest } = fullResponse;
-        return rest;
+
+        return fullResponse;
       }),
       pagination: {
         total,
@@ -108,19 +115,25 @@ export class BlogsService {
     };
   }
 
-  async findOne(identifier: string): Promise<IBlogResponse> {
+  async findOne(identifier: string, isAdmin = false): Promise<IBlogResponse> {
     const isId = isUUID(identifier);
 
-    const blog = await this.blogRepository.findOne({
-      where: isId ? { id: identifier } : { slug: identifier },
-    });
+    const where: any = isId ? { id: identifier } : { slug: identifier };
+
+    if (!isAdmin) {
+      where.isPublished = true;
+    }
+
+    const blog = await this.blogRepository.findOne({ where });
 
     if (!blog) {
       throw new NotFoundException('Blog not found');
     }
 
-    blog.viewCount += 1;
-    await this.blogRepository.save(blog);
+    if (!isAdmin) {
+      blog.viewCount += 1;
+      await this.blogRepository.save(blog);
+    }
 
     return this.mapToResponse(blog);
   }
@@ -163,7 +176,6 @@ export class BlogsService {
     const updatedBlog = await this.blogRepository.save(blog);
     return this.mapToResponse(updatedBlog);
   }
-
 
   async remove(id: string): Promise<void> {
     const result = await this.blogRepository.delete(id);
