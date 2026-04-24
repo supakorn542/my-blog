@@ -4,25 +4,30 @@ export type IBlog = {
   title: string;
   content: string;
   excerpt: string;
-  cover_image_url: string;
-  additional_images: string[];
-  view_count: number;
-  is_published: boolean;
-  published_at: string | null;
-  created_at: string;
-  updated_at: string;
+  coverImageUrl: string;
+  additionalImages: string[];
+  viewCount: number;
+  isPublished: boolean;
+  publishedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type ICreateBlogRequest = Omit<
   IBlog,
-  "id" | "view_count" | "slug" | "published_at" | "created_at" | "updated_at" | "excerpt"
+  "id" | "viewCount" | "slug" | "publishedAt" | "createdAt" | "updatedAt" | "excerpt"
 > & {
   excerpt?: string;
 };
 
 export type IUpdateBlogRequest = Partial<ICreateBlogRequest> & {
-  is_published?: boolean;
+  isPublished?: boolean;
   slug?: string;
+};
+
+export type IGetBlogsPaginationRequest = {
+  page?: number;
+  limit?: number;
 };
 
 export type IBlogResponse = IBlog;
@@ -33,6 +38,6 @@ export type IBlogPaginatedResponse = {
     total: number;
     page: number;
     limit: number;
-    total_pages: number;
+    totalPages: number; 
   };
 };

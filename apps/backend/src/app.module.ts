@@ -21,7 +21,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         password: configService.get<string>('DB_PASSWORD', 'mysecretpassword'),
         database: configService.get<string>('DB_NAME', 'my_blog_db'),
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: false,
       }),
     }),
     BlogsModule,

@@ -2,14 +2,14 @@ export type CommentStatus = "PENDING" | "APPROVED" | "REJECTED";
 
 export type IComment = {
     id: string;
-    blog_id: string;
-    sender_name: string;
+    blogId: string;
+    senderName: string;
     content: string;
     status: CommentStatus;
-    created_at: string;
+    createdAt: string;
 }
 
-export type ICreateCommentRequest = Omit<IComment, "id" | "status" | "created_at">;
+export type ICreateCommentRequest = Omit<IComment, "id" | "status" | "createdAt">;
 
 export type IUpdateStatusCommentRequest = {
     status: CommentStatus;

@@ -1,8 +1,8 @@
 export type IAdmin = {
   id: string;
   username: string;
-  password_hash: string;
-  created_at: string;
+  passwordHash: string;
+  createdAt: string;
 };
 
 export type ILoginRequest = {
@@ -10,4 +10,4 @@ export type ILoginRequest = {
   password: string;
 };
 
-export type IAdminResponse = Omit<IAdmin, "password_hash">;
+export type IAdminResponse = Omit<IAdmin, "passwordHash">;
