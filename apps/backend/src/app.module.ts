@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { BlogsModule } from './blogs/blogs.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,10 +22,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         password: configService.get<string>('DB_PASSWORD', 'mysecretpassword'),
         database: configService.get<string>('DB_NAME', 'my_blog_db'),
         autoLoadEntities: true,
-        synchronize: false,
+        synchronize: true,
       }),
     }),
     BlogsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
