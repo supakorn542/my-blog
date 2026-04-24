@@ -9,38 +9,38 @@ import {
 @Entity('blogs')
 export class Blog {
   @PrimaryGeneratedColumn('uuid')
-  id!: string;
+  id: string;
 
   @Column()
-  slug!: string;
+  slug: string;
 
   @Column()
-  title!: string;
+  title: string;
 
   @Column({ type: 'text' })
-  content!: string;
+  content: string;
 
   @Column({ type: 'text' })
-  excerpt!: string;
+  excerpt: string;
 
   @Column({ name: 'cover_image_url' })
-  coverImageUrl!: string;
+  coverImageUrl: string;
 
   @Column('simple-array', { name: 'additional_images' })
-  additionalImages!: string[];
+  additionalImages: string[];
 
   @Column({ name: 'view_count', default: 0 })
-  viewCount!: number;
+  viewCount: number;
 
   @Column({ name: 'is_published', default: false })
-  isPublished!: boolean;
+  isPublished: boolean;
 
   @Column({ name: 'published_at', type: 'timestamp', nullable: true })
-  publishedAt!: Date | null;
+  publishedAt: Date | null;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt!: Date;
+  createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt!: Date;
+  updatedAt: Date;
 }

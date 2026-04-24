@@ -1,3 +1,3 @@
-export * from "./blog.type.ts";
-export * from "./comment.type.ts";
-export * from "./admin.type.ts";
+export * from "./blog.type";
+export * from "./comment.type";
+export * from "./admin.type";

@@ -15,7 +15,7 @@ export type IBlog = {
 
 export type ICreateBlogRequest = Omit<
   IBlog,
-  "id" | "view_count" | "slug" | "published_at" | "created_at" | "updated_at"
+  "id" | "view_count" | "slug" | "published_at" | "created_at" | "updated_at" | "excerpt"
 > & {
   excerpt?: string;
 };
