@@ -6,6 +6,7 @@ import {
   Request,
   Res,
   Req,
+  Get,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
@@ -69,6 +70,16 @@ export class AuthController {
     });
 
     return { message: 'Token refreshed' };
+  }
+
+  @ApiOperation({ summary: 'Get current admin profile' })
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Req() req) {
+    return {
+      id: req.user.userId || req.user.id,
+      username: req.user.username,
+    };
   }
 
   @ApiOperation({ summary: 'Logout and clear all cookies' })
