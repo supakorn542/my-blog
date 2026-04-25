@@ -56,6 +56,7 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: 'Refresh access token' })
+  @Post('refresh')
   async refresh(@Req() req, @Res({ passthrough: true }) res: Response) {
     const refreshToken = req.cookies?.RefreshToken;
     const newAccessToken = await this.authService.refreshToken(refreshToken);

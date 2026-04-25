@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { CommentsModule } from './comments/comments.module';
+import { FilesModule } from './files/files.module';
+import { SeederModule } from './seeder/seeder.module';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { CommentsModule } from './comments/comments.module';
     BlogsModule,
     AuthModule,
     CommentsModule,
+    FilesModule,
+    SeederModule,
   ],
   controllers: [AppController],
   providers: [AppService],

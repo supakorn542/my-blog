@@ -7,12 +7,14 @@ import slugify from 'slugify';
 import { IBlogPaginatedResponse, IBlogResponse } from '@my-blog/types';
 import { validate as isUUID } from 'uuid';
 import { UpdateBlogDto } from './dto/update-blog.dto';
+import { FilesService } from '../files/files.service';
 
 @Injectable()
 export class BlogsService {
   constructor(
     @InjectRepository(Blog)
     private blogRepository: Repository<Blog>,
+    private filesService: FilesService,
   ) {}
 
   private mapToResponse(blog: Blog): IBlogResponse {
@@ -148,6 +150,28 @@ export class BlogsService {
       throw new NotFoundException('Blog not found');
     }
 
+    if (
+      updateBlogDto.coverImageUrl &&
+      updateBlogDto.coverImageUrl !== blog.coverImageUrl
+    ) {
+      if (blog.coverImageUrl) {
+        await this.filesService.deleteFileByUrl(blog.coverImageUrl);
+      }
+    }
+
+    if (updateBlogDto.additionalImages !== undefined) {
+      if (blog.additionalImages && blog.additionalImages.length > 0) {
+        const newAdditionalImages = updateBlogDto.additionalImages ?? [];
+        const imagesToDelete = blog.additionalImages.filter(
+          (oldImgUrl) => !newAdditionalImages.includes(oldImgUrl),
+        );
+
+        for (const imgUrl of imagesToDelete) {
+          await this.filesService.deleteFileByUrl(imgUrl);
+        }
+      }
+    }
+
     if (updateBlogDto.slug && updateBlogDto.slug !== blog.slug) {
       const baseSlug = slugify(updateBlogDto.slug, {
         lower: true,
@@ -178,9 +202,21 @@ export class BlogsService {
   }
 
   async remove(id: string): Promise<void> {
-    const result = await this.blogRepository.delete(id);
-    if (result.affected === 0) {
+    const blog = await this.blogRepository.findOne({ where: { id } });
+    if (!blog) {
       throw new NotFoundException('Blog not found');
     }
+
+    if (blog.coverImageUrl) {
+      await this.filesService.deleteFileByUrl(blog.coverImageUrl);
+    }
+
+    if (blog.additionalImages && blog.additionalImages.length > 0) {
+      for (const imgUrl of blog.additionalImages) {
+        await this.filesService.deleteFileByUrl(imgUrl);
+      }
+    }
+
+    await this.blogRepository.remove(blog);
   }
 }
